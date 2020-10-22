@@ -1,4 +1,4 @@
-# finalproject-cchristian1
+# Code Book
 
 ncbi-acc-download -F fasta -m protein XP_032219055.1
 
