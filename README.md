@@ -1,5 +1,21 @@
 # Code Book
 
+mkdir ~/data/blast
+
+#creates directory for BLAST database
+
+gunzip proteomes/*.gz
+
+#unzip proteomes in seperate directory
+
+cat  proteomes/* > ~/data/blast/allprotein.fas
+
+#puts all protein sequences into a single file
+
+makeblastdb -in ~/data/blast/allprotein.fas -parse_seqids -dbtype prot
+
+#creates BLAST database
+
 ncbi-acc-download -F fasta -m protein XP_032219055.1
 
 #dowloads amino acid sequence for Neamto Stella CAMSAP
