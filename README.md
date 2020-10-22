@@ -32,7 +32,7 @@ t_coffee -other_pg seq_reformat -in XP_032219055.blastp.detail.filtered.aligned.
 
 #provides statistics about the alignment
 
-t_coffee -other_pg seq_reformat -in XP_032219055.blastp.detail.filtered.aligned.fas -action +rm_gap 50 -out allhomologs.aligned.r50.f
+t_coffee -other_pg seq_reformat -in XP_032219055.blastp.detail.filtered.aligned.fas -action +rm_gap 50 -out allhomologs.aligned.r50.9055.f
 
 #removes all columns from allignment that contain greater than 50% gapped residues
 
