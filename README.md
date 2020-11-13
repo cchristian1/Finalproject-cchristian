@@ -55,3 +55,27 @@ t_coffee -other_pg seq_reformat -in XP_032219055.blastp.detail.filtered.aligned.
 alv -kli --majority allhomologs.aligned.r50.f | less -RS
 
 #view final alignment
+
+iqtree -s allhomologs.aligned.r50.9055.f -nt 2
+
+#creates phylogenetic tree from alignment
+
+nw_display allhomologs.aligned.r50.9055.f.treefile
+
+#view tree with arbitrary root
+
+gotree draw png -w 1000 -i allhomologs.aligned.r50.9055.f.treefile -r -o allhomologs.aligned.r50.9055.f.treefile.png
+
+#view unrooted tree. Creates png of unrooted tree
+
+gotree reroot midpoint -i allhomologs.aligned.r50.9055.f.treefile -o allhomologs.aligned.r50.9055.f.midpoint.treefile
+
+#roots tree at the midpoint
+
+nw_display allhomologs.aligned.r50.9055.f.midpoint.treefile
+
+#view tree in console
+
+nw_display -s allhomologs.aligned.r50.9055.f.midpoint.treefile -w 1000 -b 'opacity:0' > allhomologs.aligned.r50.9055.f.midpoint.svg
+
+#create svg of midpoint rooted tree
