@@ -120,4 +120,30 @@ java -jar ~/tools/Notung-3.0-beta/Notung-3.0-beta.jar -b camsaptree.txt --root -
 
 #reroot tree to minimize duplications and losses. Compare to reconcilled tree
 
+nano camsaptree.txt
 
+#replace gene tree with XP_032219055.r50.ufboot.midpoint.treefile.rooting.0.  This is the rerooted tree
+
+java -jar ~/tools/Notung-3.0-beta/Notung-3.0-beta.jar -b camsaptree.txt --rearrange --speciestag prefix  --savepng --treestats --events  --outputdir CAMSAPtreeroot_rearrange --edgeweights name --threshold 90 
+
+#rearranges rerooted tree using a threshold of 90 to rearrange poorly supported branches. compare the re rooted tree to the rearranged tree in the new "CAMSAPtreeroot_rearrange" file.  If they are identical, (as they were when I ran this code) stop and continue after the command to run the topology test.  If not, note changes between trees and continue
+
+python ~/tools/recPhyloXML/python/NOTUNGtoRecPhyloXML.py -g XP_032219055.r50.ufboot.midpoint.treefile.rooting.0.rearrange.0 --include.species
+
+#creates XML to view rearranged tree in species tree.  View file at http://phylariane.univ-lyon1.fr/recphyloxml/recphylovisu.
+
+ java -jar ~/tools/Notung-3.0-beta/Notung-3.0-beta.jar -g CAMSAPtreeroot_rearrange/XP_032219055.r50.ufboot.midpoint.treefile.rooting.0.rearrange.0   -s species.tre --reconcile --speciestag prefix  --treeoutput newick --nolosses
+ 
+ #converts rearranged tree from Notung to Newick.  Make sure this is done in the main directory
+ 
+gotree unroot -i XP_032219055.r50.ufboot.midpoint.treefile.rooting.0.rearrange.0.reconciled -o XP_032219055.r50.ufboot.unrooted.treefile.rearrange
+
+#unroots rearranged tree
+
+cat XP_032219055.r50.ufboot.treefile XP_032219055.r50.ufboot.unrooted.treefile.rearrange > XP_032219055.r50.alternativetrees
+
+#concentrates unrooted optimal tree and unrooted rearranged tree into a single file
+
+iqtree -s allhomologs.aligned.r50.9055.f -z XP_032219055.r50.alternativetrees -au -zb 10000 --prefix CAMSAP_altTrees -m LG+F+R5 -nt 2 -te XP_032219055.r50.ufboot.treefile
+
+#runs topology test.  If the p value for tree two (the rearranged tree) is less than 0.05 it is signifigantly worse than tree one and should be rejected.  If it is greater than 0.05, we cannot reject the rearranged tree and it must be used as part of the confidence set.
