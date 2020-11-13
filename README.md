@@ -147,3 +147,19 @@ cat XP_032219055.r50.ufboot.treefile XP_032219055.r50.ufboot.unrooted.treefile.r
 iqtree -s allhomologs.aligned.r50.9055.f -z XP_032219055.r50.alternativetrees -au -zb 10000 --prefix CAMSAP_altTrees -m LG+F+R5 -nt 2 -te XP_032219055.r50.ufboot.treefile
 
 #runs topology test.  If the p value for tree two (the rearranged tree) is less than 0.05 it is signifigantly worse than tree one and should be rejected.  If it is greater than 0.05, we cannot reject the rearranged tree and it must be used as part of the confidence set.
+
+iprscan5   --email your.email@stonybrook.edu  --multifasta --useSeqId --sequence   XP_032219055.blastp.detail.filtered.fas
+
+#sends CAMSAP alignement to interproscan for analysis
+
+cat *.tsv.txt > CAMSAP.domains.all.tsv
+
+Concentrates output into a single file
+
+grep Pfam CAMSAP.domains.all.tsv >  CAMSAP.domains.pfam.tsv
+
+#filters for results obtained using the pfam database
+
+awk 'BEGIN{FS="\t"} {print $1"\t"$3"\t"$7"@"$8"@"$5}' CAMSAP.domains.pfam.tsv | datamash -sW --group=1,2 collapse 3 | sed 's/,/\t/g' | sed 's/@/,/g' > CAMSAP.domains.pfam.evol.tsv
+
+#rearranges interproscan output. push this output to to a remote repository.  go to https://www.evolgenius.info/evolview/. input the rerooted tree (or the ideal tree) along with CAMSAP.domains.pfam.evol.tsv.  This will produce a graphic with the CAMSAP phylogeny and the PFAM domains displayed next to it. 
