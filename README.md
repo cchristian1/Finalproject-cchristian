@@ -79,3 +79,45 @@ nw_display allhomologs.aligned.r50.9055.f.midpoint.treefile
 nw_display -s allhomologs.aligned.r50.9055.f.midpoint.treefile -w 1000 -b 'opacity:0' > allhomologs.aligned.r50.9055.f.midpoint.svg
 
 #create svg of midpoint rooted tree
+
+iqtree -s allhomologs.aligned.r50.9055.f -bb 1000 -nt 2 --prefix XP_032219055.r50.ufboot
+
+#generates bootstrap support values
+
+gotree reroot midpoint -i XP_032219055.r50.ufboot.treefile -o XP_032219055.r50.ufboot.midpoint.treefile
+
+#creates midpoint rooted tree with bootstrap support
+
+nw_display XP_032219055.r50.ufboot.midpoint.treefile
+
+#view midpoint rooted tree with bootstrap support in console
+
+nw_display -s XP_032219055.r50.ufboot.midpoint.treefile -w 1000 -b 'opacity:0' >XP_032219055.r50.ufboot.midpoint.treefile.svg
+
+#creates svg image of midpoint rooted tree with bootstrap support
+
+nano species.tre
+
+#creare a species phylogeny for the 5 species being exaimined. paste "(((Homo_sapiens,Strongylocentrotus_purpuratus)Deuterostomia,Drosophila_melanogaster)Bilateria,(Nematostella_vectensis,Pocillopora_damicornis)Cnidaria)Eumetazoa;" as the text in the file
+
+nano camsaptree.txt
+
+#paste species.tre and XP_032219055.r50.ufboot.midpoint.treefile into this file
+
+java -jar ~/tools/Notung-3.0-beta/Notung-3.0-beta.jar -b camsaptree.txt --reconcile --speciestag prefix --savepng --treestats --events --phylogenomics
+
+#reconciles gene tree with species tree
+
+python ~/tools/recPhyloXML/python/NOTUNGtoRecPhyloXML.py -g XP_032219055.r50.ufboot.midpoint.treefile.reconciled --include.species
+
+#Generates a RecPhyloXML object to view the gene-within-species tree. push this file to a repository and examine at http://phylariane.univ-lyon1.fr/recphyloxml/recphylovisu.
+
+less XP_032219055.r50.ufboot.midpoint.treefile.reconciled.events.txt
+
+#view total dupications and losses for the reconcilled tree
+
+java -jar ~/tools/Notung-3.0-beta/Notung-3.0-beta.jar -b camsaptree.txt --root --speciestag prefix --savepng --treestats --events --phylogenomics
+
+#reroot tree to minimize duplications and losses. Compare to reconcilled tree
+
+
